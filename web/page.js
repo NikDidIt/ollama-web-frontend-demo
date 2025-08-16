@@ -66,6 +66,8 @@ function sendChat() {
         submitButton.disabled = false;
         loading.style.display = 'none';
 
+        chatInput.focus(); //put the cursor back into the textarea
+
         messageElement.scrollIntoView({
             behavior: 'smooth', // for smooth scrolling animation
             block: 'start'      // aligns the top of the element with the top of the viewport
@@ -75,4 +77,12 @@ function sendChat() {
         console.error('Error sending chat:', error);
     });
 
+}
+
+function textAreaListener(event) {
+    const submitButton = document.getElementById('chat-submit');
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Prevent the default Enter key behavior (e.g., new line)
+        submitButton.click(); // Trigger the form submission
+    }
 }
