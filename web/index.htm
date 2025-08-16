@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Ollama Web Frontend
+        </title>
+        <script src="page.js"></script> 
+        <link rel="stylesheet" href="page.css">
+    </head>
+    <body onload="buildModelSelect()">
+        <h2>Ollama Web Frontend</h2>
+        <div id="chat-container"></div>
+        <div id="input-container">
+            <form id="chat-form" style="display: block;" onsubmit="event.preventDefault(); sendChat()">
+                <textarea type="text" id="chat" class=".question-text" rows="3" placeholder="Ask a question..." style="width: 100%;"></textarea></br>
+                <select id="model" class="hide-on-mobile"></select>
+                <button type="submit" id="chat-submit" style="vertical-align: top;">Send</button>
+                <img id="loading" src="spinner-icon-gif-26.gif" style="display: none; width: 50px; height: 50px; vertical-align: top;">
+            </form>
+        </div>
+
+    </body>
+</html>
