@@ -59,7 +59,15 @@ function sendChat() {
         messageElement.classList.add('message-ai');
         messageElement.innerHTML = 'AI: ' + message;
         chatContainer.appendChild(messageElement);
-        
+        const downloadMsg = document.createElement('img');
+        downloadMsg.id = 'download';
+        downloadMsg.src = 'down.gif';
+        downloadMsg.classList.add('download');
+        downloadMsg.title = 'Download Chat Message';
+        messageElement.appendChild(downloadMsg);
+        downloadMsg.onclick = function () {
+            downloadMessage(messageElement);
+        };
 
         chatInput.disabled = false;
         modelSelect.disabled = false;
@@ -85,4 +93,26 @@ function textAreaListener(event) {
         event.preventDefault(); // Prevent the default Enter key behavior (e.g., new line)
         submitButton.click(); // Trigger the form submission
     }
+}
+
+function downloadMessage(element) {
+    let downloadImg = null;
+    for (const child of element.children) {
+        if (child.id == 'download') { //remove image for downloaded file
+            downloadImg = child;
+            element.removeChild(child);
+        }
+    }
+
+    //create a download link for the html data
+    const blob = new Blob([element.innerHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "OWF-"+new Date().toISOString()+".html";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    //add image back
+    element.appendChild(downloadImg);
 }

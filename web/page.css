@@ -12,6 +12,17 @@
     margin-bottom: 20px;
     background-color: #f8f8f8;
     border-radius: 5px;
+    position: relative;
+}
+
+.download {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.download:hover {
+    cursor: pointer;
 }
 
 .question-text {
