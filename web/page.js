@@ -59,10 +59,22 @@ function sendChat() {
         messageElement.classList.add('message-ai');
         messageElement.innerHTML = 'AI: ' + message;
         chatContainer.appendChild(messageElement);
+
+        const speaker = document.createElement('img');
+        speaker.id = 'speaker';
+        speaker.src = 'speaker.gif';
+        speaker.classList.add('speaker');
+        speaker.title = 'Read Message';
+        messageElement.appendChild(speaker);
+        speaker.onclick = function () {
+            readMessage(messageElement, speaker);
+        };
+
         const downloadMsg = document.createElement('img');
         downloadMsg.id = 'download';
         downloadMsg.src = 'down.gif';
         downloadMsg.classList.add('download');
+        downloadMsg.classList.add('hide-on-mobile');
         downloadMsg.title = 'Download Chat Message';
         messageElement.appendChild(downloadMsg);
         downloadMsg.onclick = function () {
@@ -81,6 +93,11 @@ function sendChat() {
             block: 'start'      // aligns the top of the element with the top of the viewport
         });
 
+        const autoReadCheckbox = document.getElementById('autoread');
+        if (autoReadCheckbox.checked) {
+            readMessage(messageElement, speaker);
+        }
+
     }).catch(error => {
         console.error('Error sending chat:', error);
     });
@@ -96,13 +113,17 @@ function textAreaListener(event) {
 }
 
 function downloadMessage(element) {
-    let downloadImg = null;
+
+    let removeItems = [];
     for (const child of element.children) {
-        if (child.id == 'download') { //remove image for downloaded file
-            downloadImg = child;
-            element.removeChild(child);
+        if (child.id == 'download' || child.id == 'speaker' || child.id == 'nospeaker') { //remove image for downloaded file
+            removeItems.push(child);
         }
     }
+    //console.log(removeItems);
+    removeItems.forEach(item => {
+        element.removeChild(item);
+    });
 
     //create a download link for the html data
     const blob = new Blob([element.innerHTML], { type: 'text/html' });
@@ -113,6 +134,40 @@ function downloadMessage(element) {
     a.click();
     URL.revokeObjectURL(url);
 
-    //add image back
-    element.appendChild(downloadImg);
+    removeItems.forEach(item => {
+        element.appendChild(item);
+    });
+
+}
+
+function readMessage(element, speaker) {
+
+    speaker.style.display = 'none';
+
+    const message = element.innerText.replace('AI:', '');
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = 'en-US';
+    utterance.rate = 1.2;
+    utterance.volume = 1;
+    utterance.pitch = 1;
+    let voices = speechSynthesis.getVoices();
+    let voice = voices.find(voice => voice.name === 'Google US English');
+    if (!voice) {
+        voice = voices[1];
+    }
+    utterance.voice = voice;
+    window.speechSynthesis.speak(utterance);
+
+    const nospeaker = document.createElement('img');
+    nospeaker.id = 'nospeaker';
+    nospeaker.src = 'nospeaker.gif';
+    nospeaker.classList.add('speaker');
+    nospeaker.title = 'Cancle Read Message';
+    element.appendChild(nospeaker);
+    nospeaker.onclick = function () {
+        window.speechSynthesis.cancel();
+        element.removeChild(nospeaker);
+        speaker.style.display = 'inline-block';
+    };
+
 }

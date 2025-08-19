@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
             <form id="chat-form" style="display: block;" onsubmit="event.preventDefault(); sendChat()">
                 <textarea type="text" id="chat" class=".question-text" rows="3" autofocus
                     placeholder="Ask a question..." style="width: 100%;" onkeydown="textAreaListener(event);"></textarea></br>
-                <select id="model" class="hide-on-mobile"></select>
+                <select id="model" class="hide-on-mobile"></select><input type="checkbox" id="autoread" name="autoread" value="autoread" /><label for="autoread">Autoread</label>
                 <button type="submit" id="chat-submit" style="vertical-align: top;">Send</button>
                 <img id="loading" src="spinner-icon-gif-26.gif" style="display: none; width: 50px; height: 50px; vertical-align: top;">
             </form>

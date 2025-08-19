@@ -25,6 +25,16 @@
     cursor: pointer;
 }
 
+.speaker {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.speaker.hover {
+    cursor: pointer;
+}
+
 .question-text {
     border: 1px solid #000000;
     padding: 10px;
